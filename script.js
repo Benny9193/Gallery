@@ -118,6 +118,17 @@ class PhotoGallery {
 
     processFiles(files) {
         files.forEach(file => {
+            // Validate file type by both MIME type and extension
+            const validExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.svg'];
+            const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+            const isValidType = file.type.startsWith('image/');
+            const isValidExtension = validExtensions.includes(fileExtension);
+            
+            if (!isValidType || !isValidExtension) {
+                console.warn(`Skipping invalid file: ${file.name}`);
+                return;
+            }
+            
             const reader = new FileReader();
             reader.onload = (e) => {
                 const image = {
@@ -153,8 +164,9 @@ class PhotoGallery {
         gallery.innerHTML = '';
 
         // Render images
-        filteredImages.forEach((image, index) => {
-            const item = this.createGalleryItem(image, index);
+        filteredImages.forEach((image) => {
+            const originalIndex = this.images.indexOf(image);
+            const item = this.createGalleryItem(image, originalIndex);
             gallery.appendChild(item);
         });
 
@@ -166,13 +178,18 @@ class PhotoGallery {
         
         switch(sortType) {
             case 'newest':
-                return sorted.sort((a, b) => 
-                    new Date(b.uploadDate) - new Date(a.uploadDate)
-                );
+                // Cache Date objects for better performance
+                return sorted.sort((a, b) => {
+                    const dateA = new Date(a.uploadDate);
+                    const dateB = new Date(b.uploadDate);
+                    return dateB - dateA;
+                });
             case 'oldest':
-                return sorted.sort((a, b) => 
-                    new Date(a.uploadDate) - new Date(b.uploadDate)
-                );
+                return sorted.sort((a, b) => {
+                    const dateA = new Date(a.uploadDate);
+                    const dateB = new Date(b.uploadDate);
+                    return dateA - dateB;
+                });
             case 'name-asc':
                 return sorted.sort((a, b) => 
                     a.name.localeCompare(b.name)
@@ -219,6 +236,12 @@ class PhotoGallery {
     }
 
     openLightbox(index) {
+        // Validate index bounds
+        if (index < 0 || index >= this.images.length) {
+            console.error('Invalid image index:', index);
+            return;
+        }
+        
         this.currentImageIndex = index;
         const image = this.images[index];
         
