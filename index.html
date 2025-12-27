@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>📸 Photo Gallery</h1>
+        <p class="subtitle">A beautiful and feature-rich photo gallery</p>
+    </header>
+
+    <div class="container">
+        <!-- Controls Section -->
+        <div class="controls">
+            <div class="control-group">
+                <input type="file" id="imageUpload" accept="image/*" multiple hidden>
+                <button class="btn btn-primary" onclick="document.getElementById('imageUpload').click()">
+                    📁 Upload Images
+                </button>
+                <button class="btn btn-secondary" id="clearAll">🗑️ Clear All</button>
+            </div>
+            
+            <div class="control-group">
+                <input type="text" id="searchInput" placeholder="🔍 Search images...">
+                <select id="sortSelect">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="name-asc">Name (A-Z)</option>
+                    <option value="name-desc">Name (Z-A)</option>
+                    <option value="size-desc">Largest First</option>
+                    <option value="size-asc">Smallest First</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label>View Mode:</label>
+                <button class="btn btn-view" id="gridView">⊞ Grid</button>
+                <button class="btn btn-view" id="listView">☰ List</button>
+            </div>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div id="gallery" class="gallery-grid">
+            <!-- Images will be dynamically added here -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state">
+            <div class="empty-icon">📷</div>
+            <h2>No images yet</h2>
+            <p>Upload some images to get started!</p>
+            <button class="btn btn-primary" onclick="document.getElementById('imageUpload').click()">
+                Upload Your First Image
+            </button>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <span class="close">&times;</span>
+        <button class="nav-btn prev">‹</button>
+        <button class="nav-btn next">›</button>
+        <div class="lightbox-content">
+            <img id="lightboxImage" src="" alt="">
+            <div class="image-info">
+                <h3 id="imageName"></h3>
+                <p id="imageDetails"></p>
+                <div class="lightbox-actions">
+                    <button class="btn btn-danger" id="deleteImage">🗑️ Delete</button>
+                    <button class="btn btn-secondary" id="downloadImage">💾 Download</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
